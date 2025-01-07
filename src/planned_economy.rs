@@ -1,15 +1,14 @@
-use crate::{Recipe, pluralize, all_goods, all_services, all_species, Good, Need, Service, Species};
-
-use std::{
-    collections::BTreeMap,
-    fmt::Display,
+use crate::{
+    all_goods, all_services, all_species, pluralize, Good, Need, Recipe, Service, Species,
 };
+
+use std::{collections::BTreeMap, fmt::Display};
 
 #[derive(Debug)]
 pub struct PlannedEconomy {
     pub species: Menu<Species>,
     pub services: Menu<Service>,
-    pub goods: Menu<Good>
+    pub goods: Menu<Good>,
 }
 
 impl Default for PlannedEconomy {
@@ -23,7 +22,7 @@ impl PlannedEconomy {
         Self {
             species: Menu::new(all_species()),
             services: Menu::new(all_services()),
-            goods: Menu::new(all_goods())
+            goods: Menu::new(all_goods()),
         }
     }
 

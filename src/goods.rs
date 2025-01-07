@@ -48,7 +48,15 @@ impl Recipe for Good {
 }
 
 pub fn all_goods() -> Vec<Good> {
-    [all_fuels(), all_crafting_resources(), all_building_materials(), all_clothing(), all_complex_food(), all_consumable_items()].concat()
+    [
+        all_fuels(),
+        all_crafting_resources(),
+        all_building_materials(),
+        all_clothing(),
+        all_complex_food(),
+        all_consumable_items(),
+    ]
+    .concat()
 }
 
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
@@ -237,28 +245,29 @@ pub fn copper_ore() -> Good {
 
 pub fn all_crafting_resources() -> Vec<Good> {
     vec![
-    pottery(),
-    waterskins(),
-    barrels(),
-    drizzle_water(),
-    storm_water(),
-    clearance_water(),
-    resin(),
-    leather(),
-    algae(),
-    plant_fiber(),
-    scales(),
-    reed(),
-    herbs(),
-    flour(),
-    grain(),
-    dye(),
-    copper_bars(),
-    crystallized_dew(),
-    stone(),
-    clay(),
-    salt(),
-    copper_ore()]
+        pottery(),
+        waterskins(),
+        barrels(),
+        drizzle_water(),
+        storm_water(),
+        clearance_water(),
+        resin(),
+        leather(),
+        algae(),
+        plant_fiber(),
+        scales(),
+        reed(),
+        herbs(),
+        flour(),
+        grain(),
+        dye(),
+        copper_bars(),
+        crystallized_dew(),
+        stone(),
+        clay(),
+        salt(),
+        copper_ore(),
+    ]
 }
 
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
@@ -292,7 +301,7 @@ pub fn bricks() -> Good {
 
 pub fn all_building_materials() -> Vec<Good> {
     vec![planks(), fabric(), bricks()]
-} 
+}
 
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum ConsumableItem {
@@ -357,14 +366,7 @@ pub fn tea() -> Good {
 }
 
 pub fn all_consumable_items() -> Vec<Good> {
-    vec![
-        scrolls(),
-incense(),
-training_gear(),
-wine(),
-ale(),
-tea()
-    ]
+    vec![scrolls(), incense(), training_gear(), wine(), ale(), tea()]
 }
 
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
@@ -425,13 +427,13 @@ pub fn berries() -> Good {
 pub fn all_simple_foods() -> Vec<Good> {
     vec![
         mushrooms(),
-roots(),
-vegetables(),
-fish(),
-meat(),
-eggs(),
-insects(),
-berries()
+        roots(),
+        vegetables(),
+        fish(),
+        meat(),
+        eggs(),
+        insects(),
+        berries(),
     ]
 }
 
@@ -516,12 +518,12 @@ pub fn skewers() -> Good {
 pub fn all_complex_food() -> Vec<Good> {
     vec![
         porridge(),
-biscuits(),
-pie(),
-pickled_goods(),
-jerky(),
-paste(),
-skewers()
+        biscuits(),
+        pie(),
+        pickled_goods(),
+        jerky(),
+        paste(),
+        skewers(),
     ]
 }
 
