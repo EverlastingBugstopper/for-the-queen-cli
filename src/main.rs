@@ -35,14 +35,14 @@ fn pioneer_new_land() -> PlannedEconomy {
 fn adjust(planned_economy: &mut PlannedEconomy) {
     clear_screen();
 
-    let menu_view = planned_economy.menu_view();
+    let menu_view = planned_economy.species.view();
 
     planned_economy.print_needs();
 
     let title = if menu_view.is_empty {
         "Select your starting species:"
     } else {
-        "Plan your economy:"
+        "Adjust to the weather:"
     };
 
     let formatter: MultiOptionFormatter<'_, String> =
@@ -57,7 +57,7 @@ fn adjust(planned_economy: &mut PlannedEconomy) {
         .prompt();
 
     match answer {
-        Ok(selected) => planned_economy.select(selected),
+        Ok(selected) => planned_economy.species.select(selected),
         Err(e) => exit(e),
     }
 

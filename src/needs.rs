@@ -4,7 +4,7 @@ use std::fmt;
 
 use crate::{goods::*, titleize, Clothing, ComplexFood, Good, Recipe};
 
-#[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Ord, PartialOrd, Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum Need {
     Clothing(Clothing),
     ComplexFood(ComplexFood),
@@ -35,7 +35,7 @@ impl fmt::Display for Need {
     }
 }
 
-#[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Ord, PartialOrd, Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum Service {
     Education,
     Religion,

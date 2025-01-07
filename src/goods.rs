@@ -373,7 +373,7 @@ pub fn berries() -> Good {
     Good::SimpleFood(SimpleFood::Berries)
 }
 
-#[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Ord, PartialOrd, Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum Clothing {
     Coats,
     Boots,
@@ -402,7 +402,7 @@ impl Recipe for Clothing {
     }
 }
 
-#[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Ord, PartialOrd, Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum ComplexFood {
     Porridge,
     Biscuits,
