@@ -47,6 +47,10 @@ impl Recipe for Good {
     }
 }
 
+pub fn all_goods() -> Vec<Good> {
+    [all_fuels(), all_crafting_resources(), all_building_materials(), all_clothing(), all_complex_food(), all_consumable_items()].concat()
+}
+
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum Fuel {
     Oil,
@@ -77,6 +81,10 @@ pub fn sea_marrow() -> Good {
 }
 pub fn wood() -> Good {
     Good::Fuel(Fuel::Wood)
+}
+
+pub fn all_fuels() -> Vec<Good> {
+    vec![oil(), coal(), sea_marrow(), wood()]
 }
 
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
@@ -227,6 +235,32 @@ pub fn copper_ore() -> Good {
     Good::CraftingResource(CraftingResource::CopperOre)
 }
 
+pub fn all_crafting_resources() -> Vec<Good> {
+    vec![
+    pottery(),
+    waterskins(),
+    barrels(),
+    drizzle_water(),
+    storm_water(),
+    clearance_water(),
+    resin(),
+    leather(),
+    algae(),
+    plant_fiber(),
+    scales(),
+    reed(),
+    herbs(),
+    flour(),
+    grain(),
+    dye(),
+    copper_bars(),
+    crystallized_dew(),
+    stone(),
+    clay(),
+    salt(),
+    copper_ore()]
+}
+
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum BuildingMaterial {
     Planks,
@@ -255,6 +289,10 @@ pub fn fabric() -> Good {
 pub fn bricks() -> Good {
     Good::BuildingMaterial(BuildingMaterial::Bricks)
 }
+
+pub fn all_building_materials() -> Vec<Good> {
+    vec![planks(), fabric(), bricks()]
+} 
 
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum ConsumableItem {
@@ -318,6 +356,17 @@ pub fn tea() -> Good {
     Good::ConsumableItem(ConsumableItem::Tea)
 }
 
+pub fn all_consumable_items() -> Vec<Good> {
+    vec![
+        scrolls(),
+incense(),
+training_gear(),
+wine(),
+ale(),
+tea()
+    ]
+}
+
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum SimpleFood {
     Mushrooms,
@@ -373,6 +422,19 @@ pub fn berries() -> Good {
     Good::SimpleFood(SimpleFood::Berries)
 }
 
+pub fn all_simple_foods() -> Vec<Good> {
+    vec![
+        mushrooms(),
+roots(),
+vegetables(),
+fish(),
+meat(),
+eggs(),
+insects(),
+berries()
+    ]
+}
+
 #[derive(Ord, PartialOrd, Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum Clothing {
     Coats,
@@ -391,6 +453,10 @@ pub fn coats() -> Good {
 
 pub fn boots() -> Good {
     Good::Clothing(Clothing::Boots)
+}
+
+pub fn all_clothing() -> Vec<Good> {
+    vec![coats(), boots()]
 }
 
 impl Recipe for Clothing {
@@ -445,6 +511,18 @@ pub fn paste() -> Good {
 
 pub fn skewers() -> Good {
     Good::ComplexFood(ComplexFood::Skewers)
+}
+
+pub fn all_complex_food() -> Vec<Good> {
+    vec![
+        porridge(),
+biscuits(),
+pie(),
+pickled_goods(),
+jerky(),
+paste(),
+skewers()
+    ]
 }
 
 impl Recipe for ComplexFood {

@@ -1,17 +1,30 @@
-use crate::{all_species, all_services, Need, Species, Service};
+use crate::{Recipe, pluralize, all_goods, all_services, all_species, Good, Need, Service, Species};
 
-use std::{collections::{BTreeMap, HashMap}, fmt::Display};
+use std::{
+    collections::BTreeMap,
+    fmt::Display,
+};
 
 #[derive(Debug)]
 pub struct PlannedEconomy {
     pub species: Menu<Species>,
+    pub services: Menu<Service>,
+    pub goods: Menu<Good>
+}
+
+impl Default for PlannedEconomy {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl PlannedEconomy {
     pub fn new() -> Self {
-       Self {
-        species: Menu::new(all_species())
-       }
+        Self {
+            species: Menu::new(all_species()),
+            services: Menu::new(all_services()),
+            goods: Menu::new(all_goods())
+        }
     }
 
     pub fn print_needs(&self) {
@@ -37,7 +50,7 @@ impl PlannedEconomy {
 
         let mut last_count = None;
         for (need, count) in need_count {
-            if last_count != Some(count) {
+            if last_count != Some(count) && *count >= 2 {
                 println!("-----------------------");
                 println!("Needed by {count}/{} species", num_species);
                 println!("-----------------------");
@@ -45,14 +58,15 @@ impl PlannedEconomy {
             }
             println!(" > {need}");
 
-            // for ingredient_slot in need.recipe() {
-            //     for ingredient in &ingredient_slot {
-            //         println!("  > {ingredient}");
-            //         for nested_ingredient_slot in ingredient.recipe() {
-            //             println!("    > {}", pluralize(&nested_ingredient_slot, "or"));
-            //         }
-            //     }
-            // }
+            for ingredient_slot in need.recipe() {
+                println!("  > {}", pluralize(&ingredient_slot, "or"));
+                if ingredient_slot.len() == 1 {
+                    // this is mostly for flour.
+                    for nested_slot in ingredient_slot[0].recipe() {
+                        println!("    > {}", pluralize(&nested_slot, "or"));
+                    }
+                }
+            }
         }
         println!("-----------------------");
     }
@@ -66,13 +80,16 @@ pub struct MenuView {
 
 #[derive(Debug)]
 pub struct Menu<T: Display + Copy> {
-    options: Vec<(T, Checkbox)>
+    options: Vec<(T, Checkbox)>,
 }
 
 impl<T: Display + Copy> Menu<T> {
     pub fn new(options: impl IntoIterator<Item = T>) -> Self {
         Self {
-            options: options.into_iter().map(|element| (element, Checkbox::Unchecked)).collect()
+            options: options
+                .into_iter()
+                .map(|element| (element, Checkbox::Unchecked))
+                .collect(),
         }
     }
 
@@ -107,23 +124,21 @@ impl<T: Display + Copy> Menu<T> {
     }
 
     pub fn get_selections(&self) -> Vec<T> {
-        self.options.iter().filter_map(|(option, checkbox)| {
-            if let Checkbox::Checked = checkbox {
-                Some(*option)
-            } else {
-                None
-            }
-
-        }).collect()
+        self.options
+            .iter()
+            .filter_map(|(option, checkbox)| {
+                if let Checkbox::Checked = checkbox {
+                    Some(*option)
+                } else {
+                    None
+                }
+            })
+            .collect()
     }
-
-    fn iter(&self) -> impl Iterator<Item = &(T, Checkbox)> {
-        self.options.iter()
-  }
 }
 
 #[derive(Debug)]
 enum Checkbox {
     Checked,
-    Unchecked
+    Unchecked,
 }
