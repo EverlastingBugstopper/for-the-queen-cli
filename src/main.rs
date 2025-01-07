@@ -1,15 +1,7 @@
-use crossterm::{
-    cursor::{Hide, MoveTo, Show},
-    terminal::{Clear, ClearType},
-    QueueableCommand,
-};
-use for_the_queen_cli::Economy;
+use for_the_queen_cli::{clear_screen, restore_cursor, Economy};
 use inquire::InquireError;
 
-use std::io::{stdout, Write};
-
 fn main() {
-    clear_screen();
     let mut economy = Economy::default();
     let result = economy.plan();
     exit(result)
@@ -43,18 +35,4 @@ fn exit(result: Result<(), InquireError>) -> ! {
     } else {
         std::process::exit(0);
     }
-}
-
-fn clear_screen() {
-    let mut out = stdout();
-    out.queue(Hide).unwrap();
-    out.queue(Clear(ClearType::All)).unwrap();
-    out.queue(MoveTo(0, 0)).unwrap();
-    out.flush().unwrap();
-}
-
-fn restore_cursor() {
-    let mut out = stdout();
-    out.queue(Show).unwrap();
-    out.flush().unwrap();
 }

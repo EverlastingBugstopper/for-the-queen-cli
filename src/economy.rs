@@ -2,8 +2,8 @@ use crossterm::style::{style, Color, Stylize};
 use inquire::InquireError;
 
 use crate::{
-    all_goods, all_services, all_species, pluralize, titleize, Good, MultiSelectMenu, Need, Recipe,
-    Service, SingleSelectMenu, Species,
+    all_goods, all_services, all_species, clear_screen, pluralize, titleize, Good, MultiSelectMenu,
+    Need, Recipe, Service, SingleSelectMenu, Species,
 };
 
 use std::{collections::BTreeMap, fmt::Display};
@@ -33,6 +33,7 @@ impl Economy {
     }
 
     pub fn plan(&mut self) -> Result<(), InquireError> {
+        clear_screen();
         self.print_needs();
         if self.species.view().is_empty {
             self.edit_species()?;
