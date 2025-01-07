@@ -90,29 +90,31 @@ impl Economy {
 
         let mut last_count = None;
         for (need, count) in need_count {
-            if last_count != Some(count) && *count >= 2 {
-                println!("-----------------------");
-                println!("Needed by {count}/{} species", num_species);
-                println!("-----------------------");
-                last_count = Some(count);
-            }
+            if *count >= 2 {
+                if last_count != Some(count) {
+                    println!("-----------------------");
+                    println!("Needed by {count}/{} species", num_species);
+                    println!("-----------------------");
+                    last_count = Some(count);
+                }
 
-            println!(" > {}", colorize(need, &selected_facets));
+                println!(" > {}", colorize(need, &selected_facets));
 
-            for ingredient_slot in need.recipe() {
-                let technicolor_ingredient_slot: Vec<String> = ingredient_slot
-                    .iter()
-                    .map(|ingredient| colorize(ingredient, &selected_facets))
-                    .collect();
-                println!("  > {}", pluralize(&technicolor_ingredient_slot, "or"));
-                if ingredient_slot.len() == 1 {
-                    // this is mostly for flour.
-                    for nested_slot in ingredient_slot[0].recipe() {
-                        let technicolor_nested_slot: Vec<String> = nested_slot
-                            .iter()
-                            .map(|ingredient| colorize(ingredient, &selected_facets))
-                            .collect();
-                        println!("    > {}", pluralize(&technicolor_nested_slot, "or"));
+                for ingredient_slot in need.recipe() {
+                    let technicolor_ingredient_slot: Vec<String> = ingredient_slot
+                        .iter()
+                        .map(|ingredient| colorize(ingredient, &selected_facets))
+                        .collect();
+                    println!("  > {}", pluralize(&technicolor_ingredient_slot, "or"));
+                    if ingredient_slot.len() == 1 {
+                        // this is mostly for flour.
+                        for nested_slot in ingredient_slot[0].recipe() {
+                            let technicolor_nested_slot: Vec<String> = nested_slot
+                                .iter()
+                                .map(|ingredient| colorize(ingredient, &selected_facets))
+                                .collect();
+                            println!("    > {}", pluralize(&technicolor_nested_slot, "or"));
+                        }
                     }
                 }
             }
