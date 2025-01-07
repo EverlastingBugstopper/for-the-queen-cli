@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use std::fmt;
+use std::fmt::{self, Display};
 
 use crate::{goods::*, titleize, Clothing, ComplexFood, Good, Recipe};
 
@@ -21,7 +21,7 @@ impl Recipe for Need {
     }
 }
 
-impl fmt::Display for Need {
+impl Display for Need {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
@@ -45,7 +45,7 @@ pub enum Service {
     Brawling,
 }
 
-impl fmt::Display for Service {
+impl Display for Service {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", titleize(self))
     }

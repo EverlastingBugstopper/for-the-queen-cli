@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use std::fmt;
+use std::fmt::{self, Display};
 
 use crate::{titleize, Recipe};
 
@@ -15,7 +15,7 @@ pub enum Good {
     Clothing(Clothing),
 }
 
-impl fmt::Display for Good {
+impl Display for Good {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
@@ -53,6 +53,7 @@ pub fn all_goods() -> Vec<Good> {
         all_crafting_resources(),
         all_building_materials(),
         all_clothing(),
+        all_simple_foods(),
         all_complex_food(),
         all_consumable_items(),
     ]
@@ -443,7 +444,7 @@ pub enum Clothing {
     Boots,
 }
 
-impl fmt::Display for Clothing {
+impl Display for Clothing {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", titleize(self))
     }
@@ -481,7 +482,7 @@ pub enum ComplexFood {
     Skewers,
 }
 
-impl fmt::Display for ComplexFood {
+impl Display for ComplexFood {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", titleize(self))
     }

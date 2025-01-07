@@ -1,65 +1,60 @@
-use for_the_queen_cli::{clear_screen, pluralize, restore_cursor, PlannedEconomy};
-use inquire::{formatter::MultiOptionFormatter, InquireError, MultiSelect};
+use crossterm::{
+    cursor::{Hide, MoveTo, Show},
+    terminal::{Clear, ClearType},
+    QueueableCommand,
+};
+use for_the_queen_cli::Economy;
+use inquire::InquireError;
+
+use std::io::{stdout, Write};
 
 fn main() {
-    let mut planned_economy = pioneer_new_land();
-    adjust(&mut planned_economy);
+    clear_screen();
+    let mut economy = Economy::default();
+    let result = economy.plan();
+    exit(result)
 }
 
-fn exit(e: InquireError) -> ! {
-    let message = match e {
-        InquireError::OperationInterrupted | InquireError::OperationCanceled => {
-            "We Do It All For Our Impatient Queen.".to_string()
-        }
-        InquireError::IO(e) => {
-            format!("IO Error: {e}")
-        }
-        InquireError::NotTTY => "You can't pipe stuff, this is an interactive program.".to_string(),
-        InquireError::InvalidConfiguration(e) => {
-            format!("Invalid configuration: {e}")
-        }
-        InquireError::Custom(e) => {
-            format!("{e}")
-        }
-    };
+fn exit(result: Result<(), InquireError>) -> ! {
     clear_screen();
     restore_cursor();
-    println!("{message}");
-    std::process::exit(1)
-}
 
-fn pioneer_new_land() -> PlannedEconomy {
-    PlannedEconomy::new()
-}
+    if let Err(e) = result {
+        let message = match e {
+            InquireError::OperationInterrupted | InquireError::OperationCanceled => {
+                "We Do It All For Our Impatient Queen.".to_string()
+            }
+            InquireError::IO(e) => {
+                format!("IO Error: {e}")
+            }
+            InquireError::NotTTY => {
+                "You can't pipe stuff, this is an interactive program.".to_string()
+            }
+            InquireError::InvalidConfiguration(e) => {
+                format!("Invalid configuration: {e}")
+            }
+            InquireError::Custom(e) => {
+                format!("{e}")
+            }
+        };
 
-fn adjust(planned_economy: &mut PlannedEconomy) {
-    clear_screen();
-
-    let menu_view = planned_economy.species.view();
-
-    planned_economy.print_needs();
-
-    let title = if menu_view.is_empty {
-        "Select your starting species:"
+        println!("{message}");
+        std::process::exit(1);
     } else {
-        "Adjust to the weather:"
-    };
-
-    let formatter: MultiOptionFormatter<'_, String> =
-        &|selected_species| pluralize(selected_species, "and");
-
-    let answer = MultiSelect::new(title, menu_view.options)
-        .with_help_message(
-            "↑↓ to move, space to select, ← to reset, enter to continue, esc to exit",
-        )
-        .with_formatter(formatter)
-        .with_default(&menu_view.selected_indexes)
-        .prompt();
-
-    match answer {
-        Ok(selected) => planned_economy.species.select(selected),
-        Err(e) => exit(e),
+        std::process::exit(0);
     }
+}
 
-    adjust(planned_economy)
+fn clear_screen() {
+    let mut out = stdout();
+    out.queue(Hide).unwrap();
+    out.queue(Clear(ClearType::All)).unwrap();
+    out.queue(MoveTo(0, 0)).unwrap();
+    out.flush().unwrap();
+}
+
+fn restore_cursor() {
+    let mut out = stdout();
+    out.queue(Show).unwrap();
+    out.flush().unwrap();
 }

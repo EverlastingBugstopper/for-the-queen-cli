@@ -1,48 +1,30 @@
+mod economy;
 pub mod goods;
+mod menu;
 mod needs;
-mod planned_economy;
 mod recipe;
 mod species;
 
+pub use economy::*;
 use goods::*;
+pub use menu::*;
 pub use needs::*;
-pub use planned_economy::*;
 pub use recipe::*;
 pub use species::*;
 
 use convert_case::{Case, Casing};
-use crossterm::{
-    cursor::{Hide, MoveTo, Show},
-    terminal::{Clear, ClearType},
-    QueueableCommand,
-};
 
-use std::fmt;
-use std::io::{stdout, Write};
+use std::fmt::{Debug, Display};
 
-pub fn clear_screen() {
-    let mut out = stdout();
-    out.queue(Hide).unwrap();
-    out.queue(Clear(ClearType::All)).unwrap();
-    out.queue(MoveTo(0, 0)).unwrap();
-    out.flush().unwrap();
-}
-
-pub fn restore_cursor() {
-    let mut out = stdout();
-    out.queue(Show).unwrap();
-    out.flush().unwrap();
-}
-
-pub fn titleize(debuggable: impl fmt::Debug) -> String {
+pub fn titleize(debuggable: impl Debug) -> String {
     format!("{:?}", debuggable).to_case(Case::Title)
 }
 
-pub fn pascalize(displayable: impl fmt::Display) -> String {
+pub fn pascalize(displayable: impl Display) -> String {
     format!("{}", displayable).to_case(Case::UpperCamel)
 }
 
-pub fn pluralize(options: &[impl fmt::Display], separator_word: impl fmt::Display) -> String {
+pub fn pluralize(options: &[impl Display], separator_word: impl Display) -> String {
     match options.len() {
         0 => "None".to_string(),
         1 => options[0].to_string(),

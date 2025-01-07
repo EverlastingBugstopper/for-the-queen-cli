@@ -1,4 +1,4 @@
-use std::fmt;
+use std::fmt::{self, Display};
 
 use serde::{Deserialize, Serialize};
 
@@ -103,7 +103,7 @@ impl TryFrom<&String> for Species {
     }
 }
 
-impl fmt::Display for Species {
+impl Display for Species {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", titleize(self))
     }
