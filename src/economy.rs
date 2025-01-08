@@ -4,8 +4,8 @@ use inquire::InquireError;
 use crate::{
     all_building_materials, all_clothing, all_complex_food, all_consumable_items,
     all_crafting_resources, all_fuel, all_services, all_simple_food, all_species, clear_screen,
-    pluralize, titleize, MultiSelectMenu, Need, Recipe, Resource, Service, SingleSelectMenu,
-    Species,
+    pluralize, titleize, wood, BuildingMaterial, MultiSelectMenu, Need, Recipe, Resource, Service,
+    SingleSelectMenu, Species,
 };
 
 use std::{collections::BTreeMap, fmt::Display};
@@ -32,7 +32,7 @@ impl Default for Economy {
 
 impl Economy {
     pub fn new() -> Self {
-        Self {
+        let mut economy = Self {
             species: MultiSelectMenu::new("Select your species:", all_species()),
             services: MultiSelectMenu::new("Select services you can provide:", all_services()),
             fuel: MultiSelectMenu::new("Select the you can produce:", all_fuel()),
@@ -58,7 +58,11 @@ impl Economy {
             ),
             clothing: MultiSelectMenu::new("Select the clothing you can produce:", all_clothing()),
             switcher: SingleSelectMenu::new("What would you like to do?\n", all_menus()),
-        }
+        };
+
+        economy.fuel.select(vec![wood()]);
+
+        economy
     }
 
     pub fn plan(&mut self) -> Result<(), InquireError> {
@@ -124,9 +128,21 @@ impl Economy {
     }
 
     fn print_needs(&self) {
-        let mut need_counter: BTreeMap<Need, i8> = BTreeMap::new();
+        let mut need_counter: BTreeMap<Need, usize> = BTreeMap::new();
         let selected_species = self.species.get_selections();
         let num_species = selected_species.len();
+        need_counter.insert(
+            Need::BuildingMaterial(BuildingMaterial::Planks),
+            num_species,
+        );
+        need_counter.insert(
+            Need::BuildingMaterial(BuildingMaterial::Fabric),
+            num_species,
+        );
+        need_counter.insert(
+            Need::BuildingMaterial(BuildingMaterial::Bricks),
+            num_species,
+        );
         selected_species.iter().for_each(|species| {
             species
                 .needs()
@@ -141,7 +157,7 @@ impl Economy {
                 })
         });
 
-        let mut need_count: Vec<(&Need, &i8)> = need_counter.iter().collect();
+        let mut need_count: Vec<(&Need, &usize)> = need_counter.iter().collect();
         need_count.sort_by(|a, b| b.1.cmp(a.1));
 
         let selected_facets = [

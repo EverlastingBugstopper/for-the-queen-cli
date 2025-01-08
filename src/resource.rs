@@ -283,7 +283,7 @@ pub fn all_crafting_resources() -> Vec<Resource> {
     ]
 }
 
-#[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Ord, PartialOrd, Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum BuildingMaterial {
     Planks,
     Fabric,

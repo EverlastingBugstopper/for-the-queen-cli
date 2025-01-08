@@ -7,7 +7,7 @@ pub struct MultiSelectMenu<T: Display + Copy> {
     options: Vec<(T, Checkbox)>,
 }
 
-impl<T: Display + Copy> MultiSelectMenu<T> {
+impl<T: Display + Copy + PartialEq> MultiSelectMenu<T> {
     pub fn new(title: &str, options: impl IntoIterator<Item = T>) -> Self {
         Self {
             title: title.to_string(),
@@ -26,7 +26,7 @@ impl<T: Display + Copy> MultiSelectMenu<T> {
 
         match answer {
             Ok(selected) => {
-                self.select(selected);
+                self.stringly_select(selected);
                 Ok(())
             }
             Err(e) => Err(e),
@@ -53,7 +53,17 @@ impl<T: Display + Copy> MultiSelectMenu<T> {
             .collect()
     }
 
-    fn select(&mut self, selected_options: Vec<String>) {
+    pub fn select(&mut self, selected_options: Vec<T>) {
+        self.options.iter_mut().for_each(|(option, checkbox)| {
+            *checkbox = if selected_options.contains(&option) {
+                Checkbox::Checked
+            } else {
+                Checkbox::Unchecked
+            };
+        });
+    }
+
+    fn stringly_select(&mut self, selected_options: Vec<String>) {
         self.options.iter_mut().for_each(|(option, checkbox)| {
             *checkbox = if selected_options.contains(&option.to_string()) {
                 Checkbox::Checked

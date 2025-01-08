@@ -9,6 +9,7 @@ pub enum Need {
     Clothing(Clothing),
     ComplexFood(ComplexFood),
     Service(Service),
+    BuildingMaterial(BuildingMaterial),
 }
 
 impl Recipe for Need {
@@ -17,6 +18,7 @@ impl Recipe for Need {
             Self::Clothing(clothing) => clothing.recipe(),
             Self::ComplexFood(complex_food) => complex_food.recipe(),
             Self::Service(service) => service.recipe(),
+            Self::BuildingMaterial(building_material) => building_material.recipe(),
         }
     }
 }
@@ -27,9 +29,10 @@ impl Display for Need {
             f,
             "{}",
             match self {
-                Self::Clothing(clothing) => titleize(clothing),
-                Self::ComplexFood(complex_food) => titleize(complex_food),
-                Self::Service(service) => titleize(service),
+                Self::Clothing(clothing) => clothing.to_string(),
+                Self::ComplexFood(complex_food) => complex_food.to_string(),
+                Self::Service(service) => service.to_string(),
+                Self::BuildingMaterial(building_material) => building_material.to_string(),
             }
         )
     }
