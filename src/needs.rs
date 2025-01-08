@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 
 use std::fmt::{self, Display};
 
-use crate::{goods::*, titleize, Clothing, ComplexFood, Good, Recipe};
+use crate::{resource::*, titleize, Clothing, ComplexFood, Recipe, Resource};
 
 #[derive(Ord, PartialOrd, Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum Need {
@@ -12,7 +12,7 @@ pub enum Need {
 }
 
 impl Recipe for Need {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         match self {
             Self::Clothing(clothing) => clothing.recipe(),
             Self::ComplexFood(complex_food) => complex_food.recipe(),
@@ -87,7 +87,7 @@ pub fn brawling() -> Need {
 }
 
 impl Recipe for Service {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         vec![vec![match self {
             Self::Education => scrolls(),
             Self::Religion => incense(),

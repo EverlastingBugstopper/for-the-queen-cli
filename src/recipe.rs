@@ -1,5 +1,5 @@
-use crate::Good;
+use crate::Resource;
 
 pub trait Recipe {
-    fn recipe(&self) -> Vec<Vec<Good>>;
+    fn recipe(&self) -> Vec<Vec<Resource>>;
 }

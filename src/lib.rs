@@ -1,16 +1,16 @@
 mod economy;
-pub mod goods;
 mod menu;
 mod needs;
 mod recipe;
+pub mod resource;
 mod screen;
 mod species;
 
 pub use economy::*;
-use goods::*;
 pub use menu::*;
 pub use needs::*;
 pub use recipe::*;
+use resource::*;
 pub use screen::*;
 pub use species::*;
 

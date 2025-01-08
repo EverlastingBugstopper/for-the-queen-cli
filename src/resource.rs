@@ -5,7 +5,7 @@ use std::fmt::{self, Display};
 use crate::{titleize, Recipe};
 
 #[derive(Hash, PartialEq, Eq, Clone, Copy, Debug, Serialize, Deserialize)]
-pub enum Good {
+pub enum Resource {
     Fuel(Fuel),
     CraftingResource(CraftingResource),
     BuildingMaterial(BuildingMaterial),
@@ -15,26 +15,26 @@ pub enum Good {
     Clothing(Clothing),
 }
 
-impl Display for Good {
+impl Display for Resource {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
             "{}",
             match self {
-                Self::Fuel(fuel) => titleize(fuel),
-                Self::CraftingResource(crafting_resource) => titleize(crafting_resource),
-                Self::BuildingMaterial(building_material) => titleize(building_material),
-                Self::ConsumableItem(consumable_item) => titleize(consumable_item),
-                Self::SimpleFood(simple_food) => titleize(simple_food),
-                Self::ComplexFood(complex_food) => titleize(complex_food),
-                Self::Clothing(clothing) => titleize(clothing),
+                Self::Fuel(fuel) => fuel.to_string(),
+                Self::CraftingResource(crafting_resource) => crafting_resource.to_string(),
+                Self::BuildingMaterial(building_material) => building_material.to_string(),
+                Self::ConsumableItem(consumable_item) => consumable_item.to_string(),
+                Self::SimpleFood(simple_food) => simple_food.to_string(),
+                Self::ComplexFood(complex_food) => complex_food.to_string(),
+                Self::Clothing(clothing) => clothing.to_string(),
             }
         )
     }
 }
 
-impl Recipe for Good {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+impl Recipe for Resource {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         match self {
             Self::Fuel(fuel) => fuel.recipe(),
             Self::CraftingResource(crafting_resource) => crafting_resource.recipe(),
@@ -47,13 +47,13 @@ impl Recipe for Good {
     }
 }
 
-pub fn all_goods() -> Vec<Good> {
+pub fn all_goods() -> Vec<Resource> {
     [
-        all_fuels(),
+        all_fuel(),
         all_crafting_resources(),
         all_building_materials(),
         all_clothing(),
-        all_simple_foods(),
+        all_simple_food(),
         all_complex_food(),
         all_consumable_items(),
     ]
@@ -68,8 +68,14 @@ pub enum Fuel {
     Wood,
 }
 
+impl Display for Fuel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", titleize(self))
+    }
+}
+
 impl Recipe for Fuel {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         match self {
             Self::Oil => vec![vec![grain(), meat(), vegetables(), plant_fiber(), fish()]],
             Self::Coal => vec![vec![wood(), algae()]],
@@ -79,20 +85,20 @@ impl Recipe for Fuel {
     }
 }
 
-pub fn oil() -> Good {
-    Good::Fuel(Fuel::Oil)
+pub fn oil() -> Resource {
+    Resource::Fuel(Fuel::Oil)
 }
-pub fn coal() -> Good {
-    Good::Fuel(Fuel::Coal)
+pub fn coal() -> Resource {
+    Resource::Fuel(Fuel::Coal)
 }
-pub fn sea_marrow() -> Good {
-    Good::Fuel(Fuel::SeaMarrow)
+pub fn sea_marrow() -> Resource {
+    Resource::Fuel(Fuel::SeaMarrow)
 }
-pub fn wood() -> Good {
-    Good::Fuel(Fuel::Wood)
+pub fn wood() -> Resource {
+    Resource::Fuel(Fuel::Wood)
 }
 
-pub fn all_fuels() -> Vec<Good> {
+pub fn all_fuel() -> Vec<Resource> {
     vec![oil(), coal(), sea_marrow(), wood()]
 }
 
@@ -122,8 +128,14 @@ pub enum CraftingResource {
     CopperOre,
 }
 
+impl Display for CraftingResource {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", titleize(self))
+    }
+}
+
 impl Recipe for CraftingResource {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         match self {
             Self::Pottery => vec![vec![clay()], vec![wood(), oil(), coal(), sea_marrow()]],
             Self::Waterskins => vec![vec![leather(), scales()], vec![oil(), meat(), salt()]],
@@ -156,95 +168,95 @@ impl Recipe for CraftingResource {
     }
 }
 
-pub fn pottery() -> Good {
-    Good::CraftingResource(CraftingResource::Pottery)
+pub fn pottery() -> Resource {
+    Resource::CraftingResource(CraftingResource::Pottery)
 }
 
-pub fn waterskins() -> Good {
-    Good::CraftingResource(CraftingResource::Waterskins)
+pub fn waterskins() -> Resource {
+    Resource::CraftingResource(CraftingResource::Waterskins)
 }
 
-pub fn barrels() -> Good {
-    Good::CraftingResource(CraftingResource::Barrels)
+pub fn barrels() -> Resource {
+    Resource::CraftingResource(CraftingResource::Barrels)
 }
 
-pub fn drizzle_water() -> Good {
-    Good::CraftingResource(CraftingResource::DrizzleWater)
+pub fn drizzle_water() -> Resource {
+    Resource::CraftingResource(CraftingResource::DrizzleWater)
 }
 
-pub fn storm_water() -> Good {
-    Good::CraftingResource(CraftingResource::StormWater)
+pub fn storm_water() -> Resource {
+    Resource::CraftingResource(CraftingResource::StormWater)
 }
 
-pub fn clearance_water() -> Good {
-    Good::CraftingResource(CraftingResource::ClearanceWater)
+pub fn clearance_water() -> Resource {
+    Resource::CraftingResource(CraftingResource::ClearanceWater)
 }
 
-pub fn resin() -> Good {
-    Good::CraftingResource(CraftingResource::Resin)
+pub fn resin() -> Resource {
+    Resource::CraftingResource(CraftingResource::Resin)
 }
 
-pub fn leather() -> Good {
-    Good::CraftingResource(CraftingResource::Leather)
+pub fn leather() -> Resource {
+    Resource::CraftingResource(CraftingResource::Leather)
 }
 
-pub fn algae() -> Good {
-    Good::CraftingResource(CraftingResource::Algae)
+pub fn algae() -> Resource {
+    Resource::CraftingResource(CraftingResource::Algae)
 }
 
-pub fn plant_fiber() -> Good {
-    Good::CraftingResource(CraftingResource::PlantFiber)
+pub fn plant_fiber() -> Resource {
+    Resource::CraftingResource(CraftingResource::PlantFiber)
 }
 
-pub fn scales() -> Good {
-    Good::CraftingResource(CraftingResource::Scales)
+pub fn scales() -> Resource {
+    Resource::CraftingResource(CraftingResource::Scales)
 }
 
-pub fn reed() -> Good {
-    Good::CraftingResource(CraftingResource::Reed)
+pub fn reed() -> Resource {
+    Resource::CraftingResource(CraftingResource::Reed)
 }
 
-pub fn herbs() -> Good {
-    Good::CraftingResource(CraftingResource::Herbs)
+pub fn herbs() -> Resource {
+    Resource::CraftingResource(CraftingResource::Herbs)
 }
 
-pub fn flour() -> Good {
-    Good::CraftingResource(CraftingResource::Flour)
+pub fn flour() -> Resource {
+    Resource::CraftingResource(CraftingResource::Flour)
 }
 
-pub fn grain() -> Good {
-    Good::CraftingResource(CraftingResource::Grain)
+pub fn grain() -> Resource {
+    Resource::CraftingResource(CraftingResource::Grain)
 }
 
-pub fn dye() -> Good {
-    Good::CraftingResource(CraftingResource::Dye)
+pub fn dye() -> Resource {
+    Resource::CraftingResource(CraftingResource::Dye)
 }
 
-pub fn copper_bars() -> Good {
-    Good::CraftingResource(CraftingResource::CopperBars)
+pub fn copper_bars() -> Resource {
+    Resource::CraftingResource(CraftingResource::CopperBars)
 }
 
-pub fn crystallized_dew() -> Good {
-    Good::CraftingResource(CraftingResource::CrystallizedDew)
+pub fn crystallized_dew() -> Resource {
+    Resource::CraftingResource(CraftingResource::CrystallizedDew)
 }
 
-pub fn stone() -> Good {
-    Good::CraftingResource(CraftingResource::Stones)
+pub fn stone() -> Resource {
+    Resource::CraftingResource(CraftingResource::Stones)
 }
 
-pub fn clay() -> Good {
-    Good::CraftingResource(CraftingResource::Clay)
+pub fn clay() -> Resource {
+    Resource::CraftingResource(CraftingResource::Clay)
 }
 
-pub fn salt() -> Good {
-    Good::CraftingResource(CraftingResource::Salt)
+pub fn salt() -> Resource {
+    Resource::CraftingResource(CraftingResource::Salt)
 }
 
-pub fn copper_ore() -> Good {
-    Good::CraftingResource(CraftingResource::CopperOre)
+pub fn copper_ore() -> Resource {
+    Resource::CraftingResource(CraftingResource::CopperOre)
 }
 
-pub fn all_crafting_resources() -> Vec<Good> {
+pub fn all_crafting_resources() -> Vec<Resource> {
     vec![
         pottery(),
         waterskins(),
@@ -278,8 +290,14 @@ pub enum BuildingMaterial {
     Bricks,
 }
 
+impl Display for BuildingMaterial {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", titleize(self))
+    }
+}
+
 impl Recipe for BuildingMaterial {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         match self {
             Self::Planks => vec![vec![wood()]],
             Self::Fabric => vec![vec![plant_fiber(), reed(), algae()]],
@@ -288,19 +306,19 @@ impl Recipe for BuildingMaterial {
     }
 }
 
-pub fn planks() -> Good {
-    Good::BuildingMaterial(BuildingMaterial::Planks)
+pub fn planks() -> Resource {
+    Resource::BuildingMaterial(BuildingMaterial::Planks)
 }
 
-pub fn fabric() -> Good {
-    Good::BuildingMaterial(BuildingMaterial::Fabric)
+pub fn fabric() -> Resource {
+    Resource::BuildingMaterial(BuildingMaterial::Fabric)
 }
 
-pub fn bricks() -> Good {
-    Good::BuildingMaterial(BuildingMaterial::Bricks)
+pub fn bricks() -> Resource {
+    Resource::BuildingMaterial(BuildingMaterial::Bricks)
 }
 
-pub fn all_building_materials() -> Vec<Good> {
+pub fn all_building_materials() -> Vec<Resource> {
     vec![planks(), fabric(), bricks()]
 }
 
@@ -314,8 +332,14 @@ pub enum ConsumableItem {
     Tea,
 }
 
+impl Display for ConsumableItem {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", titleize(self))
+    }
+}
+
 impl Recipe for ConsumableItem {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         match self {
             Self::Scrolls => vec![vec![leather(), plant_fiber(), wood()], vec![dye(), wine()]],
             Self::Incense => vec![
@@ -342,31 +366,31 @@ impl Recipe for ConsumableItem {
     }
 }
 
-pub fn scrolls() -> Good {
-    Good::ConsumableItem(ConsumableItem::Scrolls)
+pub fn scrolls() -> Resource {
+    Resource::ConsumableItem(ConsumableItem::Scrolls)
 }
 
-pub fn incense() -> Good {
-    Good::ConsumableItem(ConsumableItem::Incense)
+pub fn incense() -> Resource {
+    Resource::ConsumableItem(ConsumableItem::Incense)
 }
 
-pub fn training_gear() -> Good {
-    Good::ConsumableItem(ConsumableItem::TrainingGear)
+pub fn training_gear() -> Resource {
+    Resource::ConsumableItem(ConsumableItem::TrainingGear)
 }
 
-pub fn wine() -> Good {
-    Good::ConsumableItem(ConsumableItem::Wine)
+pub fn wine() -> Resource {
+    Resource::ConsumableItem(ConsumableItem::Wine)
 }
 
-pub fn ale() -> Good {
-    Good::ConsumableItem(ConsumableItem::Ale)
+pub fn ale() -> Resource {
+    Resource::ConsumableItem(ConsumableItem::Ale)
 }
 
-pub fn tea() -> Good {
-    Good::ConsumableItem(ConsumableItem::Tea)
+pub fn tea() -> Resource {
+    Resource::ConsumableItem(ConsumableItem::Tea)
 }
 
-pub fn all_consumable_items() -> Vec<Good> {
+pub fn all_consumable_items() -> Vec<Resource> {
     vec![scrolls(), incense(), training_gear(), wine(), ale(), tea()]
 }
 
@@ -382,8 +406,14 @@ pub enum SimpleFood {
     Berries,
 }
 
+impl Display for SimpleFood {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", titleize(self))
+    }
+}
+
 impl Recipe for SimpleFood {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         match self {
             Self::Mushrooms => vec![vec![drizzle_water()]],
             Self::Roots | Self::Vegetables | Self::Fish | Self::Insects | Self::Berries => vec![],
@@ -393,39 +423,39 @@ impl Recipe for SimpleFood {
     }
 }
 
-pub fn mushrooms() -> Good {
-    Good::SimpleFood(SimpleFood::Mushrooms)
+pub fn mushrooms() -> Resource {
+    Resource::SimpleFood(SimpleFood::Mushrooms)
 }
 
-pub fn roots() -> Good {
-    Good::SimpleFood(SimpleFood::Roots)
+pub fn roots() -> Resource {
+    Resource::SimpleFood(SimpleFood::Roots)
 }
 
-pub fn vegetables() -> Good {
-    Good::SimpleFood(SimpleFood::Vegetables)
+pub fn vegetables() -> Resource {
+    Resource::SimpleFood(SimpleFood::Vegetables)
 }
 
-pub fn fish() -> Good {
-    Good::SimpleFood(SimpleFood::Fish)
+pub fn fish() -> Resource {
+    Resource::SimpleFood(SimpleFood::Fish)
 }
 
-pub fn meat() -> Good {
-    Good::SimpleFood(SimpleFood::Meat)
+pub fn meat() -> Resource {
+    Resource::SimpleFood(SimpleFood::Meat)
 }
 
-pub fn eggs() -> Good {
-    Good::SimpleFood(SimpleFood::Eggs)
+pub fn eggs() -> Resource {
+    Resource::SimpleFood(SimpleFood::Eggs)
 }
 
-pub fn insects() -> Good {
-    Good::SimpleFood(SimpleFood::Insects)
+pub fn insects() -> Resource {
+    Resource::SimpleFood(SimpleFood::Insects)
 }
 
-pub fn berries() -> Good {
-    Good::SimpleFood(SimpleFood::Berries)
+pub fn berries() -> Resource {
+    Resource::SimpleFood(SimpleFood::Berries)
 }
 
-pub fn all_simple_foods() -> Vec<Good> {
+pub fn all_simple_food() -> Vec<Resource> {
     vec![
         mushrooms(),
         roots(),
@@ -450,20 +480,20 @@ impl Display for Clothing {
     }
 }
 
-pub fn coats() -> Good {
-    Good::Clothing(Clothing::Coats)
+pub fn coats() -> Resource {
+    Resource::Clothing(Clothing::Coats)
 }
 
-pub fn boots() -> Good {
-    Good::Clothing(Clothing::Boots)
+pub fn boots() -> Resource {
+    Resource::Clothing(Clothing::Boots)
 }
 
-pub fn all_clothing() -> Vec<Good> {
+pub fn all_clothing() -> Vec<Resource> {
     vec![coats(), boots()]
 }
 
 impl Recipe for Clothing {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         match self {
             Self::Coats => vec![vec![fabric(), leather()], vec![dye(), resin()]],
             Self::Boots => vec![vec![leather(), scales()]],
@@ -488,35 +518,35 @@ impl Display for ComplexFood {
     }
 }
 
-pub fn porridge() -> Good {
-    Good::ComplexFood(ComplexFood::Porridge)
+pub fn porridge() -> Resource {
+    Resource::ComplexFood(ComplexFood::Porridge)
 }
 
-pub fn biscuits() -> Good {
-    Good::ComplexFood(ComplexFood::Biscuits)
+pub fn biscuits() -> Resource {
+    Resource::ComplexFood(ComplexFood::Biscuits)
 }
 
-pub fn pie() -> Good {
-    Good::ComplexFood(ComplexFood::Pie)
+pub fn pie() -> Resource {
+    Resource::ComplexFood(ComplexFood::Pie)
 }
 
-pub fn pickled_goods() -> Good {
-    Good::ComplexFood(ComplexFood::PickledGoods)
+pub fn pickled_goods() -> Resource {
+    Resource::ComplexFood(ComplexFood::PickledGoods)
 }
 
-pub fn jerky() -> Good {
-    Good::ComplexFood(ComplexFood::Jerky)
+pub fn jerky() -> Resource {
+    Resource::ComplexFood(ComplexFood::Jerky)
 }
 
-pub fn paste() -> Good {
-    Good::ComplexFood(ComplexFood::Paste)
+pub fn paste() -> Resource {
+    Resource::ComplexFood(ComplexFood::Paste)
 }
 
-pub fn skewers() -> Good {
-    Good::ComplexFood(ComplexFood::Skewers)
+pub fn skewers() -> Resource {
+    Resource::ComplexFood(ComplexFood::Skewers)
 }
 
-pub fn all_complex_food() -> Vec<Good> {
+pub fn all_complex_food() -> Vec<Resource> {
     vec![
         porridge(),
         biscuits(),
@@ -529,7 +559,7 @@ pub fn all_complex_food() -> Vec<Good> {
 }
 
 impl Recipe for ComplexFood {
-    fn recipe(&self) -> Vec<Vec<Good>> {
+    fn recipe(&self) -> Vec<Vec<Resource>> {
         match self {
             Self::Porridge => vec![
                 vec![grain(), vegetables(), mushrooms(), herbs(), fish()],
