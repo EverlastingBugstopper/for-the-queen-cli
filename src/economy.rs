@@ -131,18 +131,20 @@ impl Economy {
         let mut need_counter: BTreeMap<Need, usize> = BTreeMap::new();
         let selected_species = self.species.get_selections();
         let num_species = selected_species.len();
-        need_counter.insert(
-            Need::BuildingMaterial(BuildingMaterial::Planks),
-            num_species,
-        );
-        need_counter.insert(
-            Need::BuildingMaterial(BuildingMaterial::Fabric),
-            num_species,
-        );
-        need_counter.insert(
-            Need::BuildingMaterial(BuildingMaterial::Bricks),
-            num_species,
-        );
+        if num_species >= 1 {
+            need_counter.insert(
+                Need::BuildingMaterial(BuildingMaterial::Planks),
+                num_species,
+            );
+            need_counter.insert(
+                Need::BuildingMaterial(BuildingMaterial::Fabric),
+                num_species,
+            );
+            need_counter.insert(
+                Need::BuildingMaterial(BuildingMaterial::Bricks),
+                num_species,
+            );
+        }
         selected_species.iter().for_each(|species| {
             species
                 .needs()
@@ -174,7 +176,7 @@ impl Economy {
 
         let mut last_count = None;
         for (need, count) in need_count {
-            if *count >= 2 {
+            if *count >= num_species / 2 {
                 if last_count != Some(count) {
                     println!("-----------------------");
                     println!("Needed by {count}/{} species", num_species);
